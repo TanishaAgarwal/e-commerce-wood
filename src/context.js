@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { storeProducts, detailProduct } from './store';
-import ls from 'local-storage'
 const ProductContext = React.createContext();
 
 class ProductProvider extends Component {
@@ -8,6 +7,11 @@ class ProductProvider extends Component {
         products:[],
         detailProduct: detailProduct,
         cart:[],
+        modalOpen:false,
+        modalProduct:detailProduct,
+        cartSubTotal:0,
+        cartTax:0,
+        cartTotal:0
     };
 
     componentDidMount(){
@@ -51,12 +55,42 @@ class ProductProvider extends Component {
         },()=>{console.log("hello cart");})
     }
 
+    openModal = (id) =>{
+        const product = this.getItem(id)
+        this.setState(()=>{
+            return {modalProduct:product,modalOpen:true}
+        })
+    }
 
+    closeModal = () =>{
+        this.setState(()=>{
+            return {modalOpen:false}
+        })
+    }
+
+    increment = (id) =>{
+        console.log("this is incrementnt")
+    }
+    decrement = (id) =>{
+        console.log("this is decrementnt")
+    }
+    removeItem = (id) =>{
+        console.log("this is remove item")
+    }
+    clearCart = () =>{
+        console.log("this is clear cart")
+    }
     render() {
         return (
             <ProductContext.Provider value={{...this.state,
                 handleDetail:this.handleDetail,
-                addToCart:this.addToCart
+                addToCart:this.addToCart,
+                openModal:this.openModal,
+                closeModal:this.closeModal,
+                increment:this.increment,
+                decrement:this.decrement,
+                removeItem:this.removeItem,
+                clearCart:this.clearCart
             }}>
                 {this.props.children}
             </ProductContext.Provider>
